@@ -1,0 +1,53 @@
+/* In case you want to have an array of objects of different type, 
+Think wisely how not to get confused.
+*/
+#include <iostream>
+
+using namespace std;
+
+class A {
+public:
+    A() {}
+    virtual ~A() {}
+    int get10() {return 10;}
+};
+
+class B: public A {
+public:
+    B(int _x) : A(), x(_x) {}
+    virtual ~B() {}
+    int get20() {return 20;}
+    int getX() {return x;}
+private:
+    int x;
+};
+
+class C: public A {
+public:
+    C(int _y) : A(), y(_y) { m_val = 5;}
+    virtual ~C() {}
+    int getY() {return y;}
+    int getMVal() {return m_val;}
+private:
+    int y;
+    int m_val;
+};
+
+int main()
+{
+    A* p_b = new B(1);
+    A* p_c = new C(2);
+    if (static_cast<C*>(p_b)->getY() == 1) {
+        cout << "It's B" << endl; //this output will be hit
+    }
+    else {
+        cout << "It's C" << endl;
+    }
+    if (static_cast<B*>(p_c)->getX() == 1) {
+        cout << "It's B" << endl;
+    }
+    else {
+        cout << "It's C" << endl; //this output will be hit
+    }
+    return 0;
+}
